@@ -951,6 +951,8 @@ dependencies = [
 [[package]]
 name = "piet-hardware"
 version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e446665b5e88925627a3f4817602104502e138afb985c4d0dcd3129dcac9ce7"
 dependencies = [
  "ahash",
  "arrayvec",
