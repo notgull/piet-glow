@@ -1,6 +1,6 @@
 [package]
 name = "piet-glow"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 license = "LGPL-3.0-or-later OR MPL-2.0"
 rust-version = "1.65.0"
@@ -15,7 +15,7 @@ description = "A hardware-accelerated 2D graphics backend for piet using glow"
 bytemuck = { version = "1.13.1", default-features = false }
 glow = { version = "0.12.2", default-features = false }
 piet = { version = "0.6.2", default-features = false }
-piet-hardware = "0.3.0"
+piet-hardware = "0.4.0"
 tracing = { version = "0.1.37", default-features = false }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]

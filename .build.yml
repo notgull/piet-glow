@@ -2,6 +2,7 @@ image: debian/testing
 packages:
 - clang
 - curl
+- libwayland-dev
 - libx11-dev
 - libx11-xcb-dev
 - libxcb1-dev
