@@ -21,8 +21,7 @@ piet_glow_check_target() {
   echo ">> Check for $target using $command"
   rustup target add "$target"
   rx cargo "$command" --target "$target" --no-default-features
-  rx cargo "$command" --target "$target" --no-default-features \
-      --features gl,wgl,egl
+  rx cargo "$command" --target "$target"
   cargo clean
 }
 
