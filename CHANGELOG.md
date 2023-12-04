@@ -2,6 +2,10 @@
 
 This log describes changes in the `piet-hardware`, `piet-glow` and `piet-wgpu` crates.
 
+## 0.1.6
+
+- Move to `src.notgull.net`
+
 ## 0.1.5
 
 - Update to the newest `piet-hardware` version.

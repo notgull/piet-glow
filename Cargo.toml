@@ -1,6 +1,6 @@
 [package]
 name = "piet-glow"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 license = "LGPL-3.0-or-later OR MPL-2.0"
 rust-version = "1.65.0"
