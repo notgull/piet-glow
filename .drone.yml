@@ -98,3 +98,27 @@ steps:
       - echo "$SSH_KEY" > ~/.ssh/id_rsa && chmod 0600 ~/.ssh/id_rsa
       - echo "$TEA_CONFIG" > ~/.config/tea/config.yml
       - release.sh
+---
+kind: pipeline
+type: docker
+name: github
+
+trigger:
+  branch:
+    - main
+  event:
+    - push
+
+steps:
+  - name: mirror to GitHub
+    image: alpine:edge
+    environment:
+      SSH_KEY:
+        from_secret: gh_ssh_key
+    commands:
+      - apk add git openssh
+      - mkdir -pv ~/.ssh
+      - ssh-keyscan -H -t rsa github.com >> ~/.ssh/known_hosts
+      - echo "$SSH_KEY" > ~/.ssh/id_rsa && chmod 0600 ~/.ssh/id_rsa
+      - git remote add github_origin git@github.com:notgull/piet-glow.git
+      - git push github_origin main
