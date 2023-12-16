@@ -25,8 +25,8 @@ pub use piet_hardware::piet;
 
 use glow::HasContext;
 
-use piet::IntoBrush;
-use piet_hardware::piet::{kurbo, Error as Pierror};
+use piet::{kurbo, Error as Pierror, IntoBrush};
+use piet_hardware::gpu_types::{AreaCapture, BufferPush, SubtextureWrite, TextureWrite};
 
 use std::borrow::Cow;
 use std::cell::Cell;
@@ -186,6 +186,7 @@ impl<H: HasContext + ?Sized> piet_hardware::GpuContext for GpuContext<H> {
         let (r, g, b, a) = color.as_rgba();
 
         unsafe {
+            self.context.disable(glow::SCISSOR_TEST);
             self.context.clear_color(c!(r), c!(g), c!(b), c!(a));
             self.context.clear(glow::COLOR_BUFFER_BIT);
         }
@@ -265,12 +266,14 @@ impl<H: HasContext + ?Sized> piet_hardware::GpuContext for GpuContext<H> {
 
     fn write_texture(
         &mut self,
-        _: &(),
-        _: &(),
-        texture: &Self::Texture,
-        (width, height): (u32, u32),
-        format: piet::ImageFormat,
-        data: Option<&[u8]>,
+        TextureWrite {
+            device: (),
+            queue: (),
+            texture,
+            size: (width, height),
+            format,
+            data,
+        }: TextureWrite<'_, Self>,
     ) {
         let data_width = match format {
             piet::ImageFormat::Grayscale => 1,
@@ -334,13 +337,15 @@ impl<H: HasContext + ?Sized> piet_hardware::GpuContext for GpuContext<H> {
 
     fn write_subtexture(
         &mut self,
-        _: &(),
-        _: &(),
-        texture: &Self::Texture,
-        (x, y): (u32, u32),
-        (width, height): (u32, u32),
-        format: piet_hardware::piet::ImageFormat,
-        data: &[u8],
+        SubtextureWrite {
+            device: (),
+            queue: (),
+            texture,
+            offset: (x, y),
+            size: (width, height),
+            format,
+            data,
+        }: SubtextureWrite<'_, Self>,
     ) {
         let data_width = match format {
             piet::ImageFormat::Grayscale => 1,
@@ -416,12 +421,14 @@ impl<H: HasContext + ?Sized> piet_hardware::GpuContext for GpuContext<H> {
 
     fn capture_area(
         &mut self,
-        _: &(),
-        _: &(),
-        texture: &Self::Texture,
-        offset: (u32, u32),
-        size: (u32, u32),
-        scale: f64,
+        AreaCapture {
+            device: (),
+            queue: (),
+            texture,
+            offset,
+            size,
+            bitmap_scale: scale,
+        }: AreaCapture<'_, Self>,
     ) -> Result<(), Self::Error> {
         let (x, y) = offset;
         let (width, height) = size;
@@ -617,13 +624,16 @@ impl<H: HasContext + ?Sized> piet_hardware::GpuContext for GpuContext<H> {
 
     fn push_buffers(
         &mut self,
-        _: &(),
-        _: &(),
-        vertex_buffer: &Self::VertexBuffer,
-        current_texture: &Self::Texture,
-        mask_texture: &Self::Texture,
-        transform: &piet_hardware::piet::kurbo::Affine,
-        size: (u32, u32),
+        BufferPush {
+            device: (),
+            queue: (),
+            vertex_buffer,
+            current_texture,
+            mask_texture,
+            transform,
+            viewport_size: size,
+            clip,
+        }: BufferPush<'_, Self>,
     ) -> Result<(), Self::Error> {
         unsafe {
             // Use our program.
@@ -639,6 +649,20 @@ impl<H: HasContext + ?Sized> piet_hardware::GpuContext for GpuContext<H> {
                 size.0 as f32,
                 size.1 as f32,
             );
+
+            // Set scissor rectangle.
+            match clip {
+                Some(clip) => {
+                    self.context.enable(glow::SCISSOR_TEST);
+                    self.context.scissor(
+                        clip.x0 as i32,
+                        size.1 as i32 - clip.y1 as i32,
+                        clip.width() as i32,
+                        clip.height() as i32,
+                    )
+                }
+                None => self.context.disable(glow::SCISSOR_TEST),
+            }
 
             // Set the transform.
             let [a, b, c, d, e, f] = transform.as_coeffs();
