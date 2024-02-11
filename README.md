@@ -6,10 +6,10 @@ A [`piet`] frontend over OpenGL, using the `glow` crate.
 
 ## Source Code
 
-The canonical code for this repository is kept on our [Git Forge]. For
+The canonical code for this repository is kept on our [Codeberg]. For
 convenience, a mirror is kept on [GitHub].
 
-[Git Forge]: https://src.notgull.net/notgull/piet-glow
+[Codeberg]: https://codeberg/notgull/piet-glow
 [GitHub]: https://github.com/notgull/piet-glow
 
 ## License

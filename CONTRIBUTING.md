@@ -1,8 +1,8 @@
 # Contribution
 
 We welcome contributions to this project. Please do not open issues or pull
-requests on the GitHub mirror. Please open issues and pull requests on our
-[`Git forge`](https://src.notgull.net/notgull/piet-glow).
+requests on the GitHub mirror. Please open issues and pull requests on
+[`Codeberg`](https://codeberg.org/notgull/piet-glow).
 
 ## Coding Style
 
@@ -15,8 +15,7 @@ warnings are fixed.
 
 ## Testing
 
-All changes submitted to this repository are run through our Drone CI system.
-Our CI scripts are stored [here](https://src.notgull.net/notgull/ci).
+All changes submitted to this repository are run through our CI system.
 
 ## DCO
 
