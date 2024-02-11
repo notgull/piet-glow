@@ -2,6 +2,10 @@
 
 This log describes changes in the `piet-hardware`, `piet-glow` and `piet-wgpu` crates.
 
+## 0.1.8
+
+- Move to `codeberg.org`
+
 ## 0.1.7
 
 - Add support for clipping rectangles in `piet-hardware` v0.5.0.

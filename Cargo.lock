@@ -950,7 +950,7 @@ dependencies = [
 
 [[package]]
 name = "piet-glow"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "bytemuck",
  "console_error_panic_hook",
